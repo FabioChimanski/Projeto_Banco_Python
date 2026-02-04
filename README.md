@@ -1,4 +1,5 @@
 **Sistema Bancário em Python com SQLite**
+
 Este é um projeto de estudo focado em Programação Orientada a Objetos e persistência de dados utilizando o banco de dados SQLite. O objetivo foi criar um simulador de caixa eletrônico funcional, aplicando conceitos reais de arquitetura de software.
 
 **Funcionalidades**
