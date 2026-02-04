@@ -78,6 +78,19 @@ while True:
                         #TRANSFERIR
                         case "5":
                             print('TRANSFERIR')
+                                                    
+                            conta_dest = input('Digite o numero da conta destino: ')
+                            valor_transf = float(input('Valor da transferencia: '))
+
+                            if conta_login.sacar(valor_transf):
+                                destino = db.buscar_conta_destino(conta_dest)
+
+                                if destino:
+                                    db.processar_transferencia(conta_login.conta, conta_dest, valor_transf)
+                                    print(f'Transferencia de R$ {valor_transf} para {destino[1]} realizada com sucesso!')
+                                else:
+                                    conta_login.depositar(valor_transf)
+                                    print('Conta destino não encontrada!')
 
                         #SAIR
                         case "0":
