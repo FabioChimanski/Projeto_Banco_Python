@@ -50,7 +50,14 @@ while True:
                         #EXTRATO
                         case "1":
                             print('EXTRATO')
+                            movimentacoes = db.buscar_extrato(conta_login.conta)
 
+                            if movimentacoes:
+                                for mov in movimentacoes:
+                                    print(f"{mov[4]} | {mov[2]:<15} | R${mov[3]:>8.2f}")
+                            else:
+                                print('Sem registro até o momento!')
+                            
                         #SALDO
                         case "2":
                             print('SALDO')
@@ -63,6 +70,7 @@ while True:
                             
                             if conta_login.sacar(valor_saque):
                                 db.atualizar_saldo(conta_login.conta, conta_login.saldo)
+                                db.registro_movimentacao(conta_login.conta, "SAQUE", valor_saque)
                                 print(f'Saque realizado com sucesso! Saldo atual R${conta_login.saldo:.2f}')
                         
                         #DEPOSITO
@@ -73,6 +81,7 @@ while True:
 
                             if conta_login.depositar(valor_deposito):
                                 db.atualizar_saldo(conta_login.conta, conta_login.saldo)
+                                db.registro_movimentacao(conta_login.conta, "DEPOSITO", valor_deposito)
                                 print(f'Deposito no valor de {valor_deposito} realizado com sucesso!')
 
                         #TRANSFERIR
@@ -87,6 +96,7 @@ while True:
 
                                 if destino:
                                     db.processar_transferencia(conta_login.conta, conta_dest, valor_transf)
+                                    db.registro_movimentacao(conta_login.conta, "TRANSFERENCIA", valor_transf)
                                     print(f'Transferencia de R$ {valor_transf} para {destino[1]} realizada com sucesso!')
                                 else:
                                     conta_login.depositar(valor_transf)

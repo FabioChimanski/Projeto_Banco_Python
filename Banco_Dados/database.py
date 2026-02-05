@@ -5,6 +5,7 @@ banco = sqlite3.connect('banco_sistema.db')
 
 cursor = banco.cursor()
 
+#CRIAÇÃO TABELA USUARIO
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS Contas_bancarias (
         conta INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -13,6 +14,31 @@ cursor.execute("""
         saldo REAL DEFAULT 0
     );
 """)
+
+#CRIAÇÃO TABELA MOVIMENTAÇÕES
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS Movimentacao_conta (
+        id_movimentacao INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_conta INTEGER NOT NULL,
+        tipo_operacao TEXT NOT NULL,
+        valor REAL NOT NULL,
+        data_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (id_conta) REFERENCES Contas_bancarias(conta)
+    );
+""")
+
+
+#REGISTRAR MOVIMENTAÇÕES
+def registro_movimentacao(id_conta, tipo, valor):
+    cursor.execute("""
+        INSERT INTO Movimentacao_conta (id_conta, tipo_operacao, valor) VALUES (?, ?, ?)
+""", (id_conta, tipo, valor))
+    banco.commit()
+
+#BUSCAR MOVIMENTAÇÕES (EXTRATO)
+def buscar_extrato(id_conta):
+    cursor.execute("SELECT * FROM Movimentacao_conta WHERE id_conta = ?", (id_conta,))
+    return cursor.fetchall()#retorna todas as linhas localizadas
 
 #CRIAR CONTA
 def criar_conta(nome_usuario, senha_usuario):
@@ -47,3 +73,4 @@ def processar_transferencia(id_origem, id_destino, valor):
     cursor.execute("UPDATE Contas_bancarias SET saldo = saldo - ? WHERE conta = ?", (valor, id_origem))
     cursor.execute("UPDATE Contas_bancarias SET saldo = saldo + ? WHERE conta = ?", (valor, id_destino))
     banco.commit()
+
