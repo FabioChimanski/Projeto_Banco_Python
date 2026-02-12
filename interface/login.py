@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import database as db
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -27,8 +28,16 @@ class App(ctk.CTk):
 
     #imprimir no terminal o usuario e senha
     def acao_do_botao(self):
-        print(self.input_usuario.get())
-        print(self.input_senha.get())
+        user = self.input_usuario.get()
+        senha = self.input_senha.get()
+
+        dados = db.acessar_conta(user, senha)
+
+        if dados:
+            print("Sucesso")
+        else:
+            print('Usuario ou senha incorretos')
+
 
 # Criamos a instância da sua classe
 ap = App()
