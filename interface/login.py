@@ -1,13 +1,14 @@
 import customtkinter as ctk
-import database as db
+import Banco_Dados.database as db
+from interface import menu
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
-class App(ctk.CTk):
+class Login(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Bem vindo")
+        self.title("Login")
         self.geometry("400x300")
 
         #Label para login
@@ -35,12 +36,22 @@ class App(ctk.CTk):
 
         if dados:
             print("Sucesso")
+
+            janela_menu = menu.Menu(user) 
+
+            self.destroy()
+            
+            janela_menu.mainloop()
+
         else:
             print('Usuario ou senha incorretos')
 
 
 # Criamos a instância da sua classe
-ap = App()
+ap = Login()
+
+# Objeto login
+
 
 # 3. O loop que mantém a janela aberta
 ap.mainloop()
